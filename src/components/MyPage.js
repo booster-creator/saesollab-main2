@@ -8,7 +8,13 @@ function MyPage() {
     <div className="mypage">
       <h1>마이페이지</h1>
       <div className="profile-section">
-        {/* 프로필 정보 */}
+        <h2>프로필 정보</h2>
+        {user && (
+          <div className="profile-info">
+            <p>이메일: {user.email}</p>
+            {/* 추가 사용자 정보 표시 */}
+          </div>
+        )}
       </div>
       <div className="history-section">
         <h2>최근 검색 기록</h2>
