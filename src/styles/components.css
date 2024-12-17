@@ -1,22 +1,68 @@
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-.login-container h2 {
-  margin-bottom: 20px;
+.login-container {
+  width: 100%;
+  max-width: 480px;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h1 {
+  font-size: 32px;
   color: #333;
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  color: #666;
+  font-size: 16px;
+}
+
+.login-box {
+  text-align: center;
+}
+
+.login-box h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.login-description {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
 }
 
 .google-login-button {
-  margin: 20px 0;
   display: flex;
   justify-content: center;
+  margin: 20px 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .login-header h1 {
+    font-size: 28px;
+  }
 }
 
 .form-group {
