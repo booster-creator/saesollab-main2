@@ -1,0 +1,36 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
+[dev]
+  publish = "public"
+  functions = "functions"
+  port = 8888
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
