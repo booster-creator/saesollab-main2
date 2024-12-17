@@ -1,6 +1,9 @@
 // YouTube API 관련 함수들
 const axios = require('axios');
 
+// YouTube API 호출 관련 코드
+const API_KEY = process.env.YOUTUBE_API_KEY;
+
 async function searchVideos(keyword, apiKey) {
     if (!apiKey) {
         throw new Error('YouTube API Key is required');
