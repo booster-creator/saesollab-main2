@@ -27,6 +27,7 @@ function Login() {
       <header className="header">
         <div className="logo-container">
           <img src="/assets/images/logo.svg" alt="DontuLab 로고" className="logo" />
+          <span>DontuLab</span>
         </div>
       </header>
       
