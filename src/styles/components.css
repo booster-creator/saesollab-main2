@@ -368,11 +368,19 @@
   font-size: 1.1rem;
   color: #212529;
   line-height: 1.4;
-  height: 3em;
+  max-height: 2.8em;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  position: relative;
+}
+
+/* 말줄임표 효과 */
+.video-title::after {
+  content: '...';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: white;
+  padding-left: 4px;
 }
 
 .stats-grid {
