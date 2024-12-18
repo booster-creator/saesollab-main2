@@ -1,3 +1,32 @@
+:root {
+  /* 토스 스타일 컬러 팔레트 */
+  --primary: #3182F6;
+  --secondary: #4E5968;
+  --background: #F9FAFB;
+  --white: #FFFFFF;
+  
+  /* Text Colors */
+  --text-primary: #191F28;
+  --text-secondary: #4E5968;
+  --text-tertiary: #8B95A1;
+  
+  /* Border Colors */
+  --border-light: #E5E8EB;
+  --border-focus: #3182F6;
+  
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
 .login-page {
   min-height: 100vh;
   display: grid;
@@ -873,4 +902,388 @@
 .loading-content p {
   margin-top: 1rem;
   color: #495057;
+}
+
+/* Toss 스타일 컴포넌트 */
+.toss-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.toss-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.toss-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.03em;
+}
+
+.toss-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+
+.toss-search-section {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.toss-search-box {
+  background: var(--white);
+  border-radius: 16px;
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.toss-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+}
+
+.toss-search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: var(--spacing-sm);
+  color: var(--text-tertiary);
+}
+
+.toss-input {
+  width: 100%;
+  border: none;
+  font-size: 1.125rem;
+  padding: var(--spacing-md) 0;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.toss-input:focus {
+  outline: none;
+}
+
+.toss-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.toss-button {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toss-button:hover:not(:disabled) {
+  background: #1c64f2;
+  transform: translateY(-1px);
+}
+
+.toss-button:disabled {
+  background: var(--border-light);
+  cursor: not-allowed;
+}
+
+.toss-loading-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.toss-loading-dots span {
+  animation: loading 1.4s infinite;
+}
+
+.toss-loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.toss-loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loading {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.toss-history {
+  margin-top: var(--spacing-lg);
+}
+
+.toss-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.toss-label {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.toss-text-button {
+  border: none;
+  background: none;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  transition: color 0.2s ease;
+}
+
+.toss-text-button:hover {
+  color: var(--text-secondary);
+}
+
+.toss-chips {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.toss-chip {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  background: var(--white);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toss-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #f8f9ff;
+}
+
+/* 토스 결과 섹션 스타일 */
+.toss-results {
+  margin-top: var(--spacing-xl);
+}
+
+.toss-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.toss-results-info {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+}
+
+.toss-results-info h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.toss-results-count {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.toss-select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toss-select:hover {
+  border-color: var(--primary);
+}
+
+.toss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.toss-card {
+  position: relative;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.toss-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.toss-card-rank {
+  position: absolute;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  background: var(--primary);
+  color: var(--white);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.toss-card-content {
+  padding: var(--spacing-lg);
+}
+
+.toss-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: var(--spacing-lg) 0 var(--spacing-xs);
+  line-height: 1.5;
+}
+
+.toss-card-channel {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.toss-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.toss-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toss-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.toss-stat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toss-meter {
+  margin: var(--spacing-lg) 0;
+}
+
+.toss-meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.toss-meter-header span {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.toss-meter-value {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.toss-meter-bar {
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.toss-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #748ffc);
+  transition: width 0.3s ease;
+}
+
+.toss-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.toss-button-secondary {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.toss-button-primary {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toss-button-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.toss-button-primary:hover {
+  background: #1c64f2;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .toss-container {
+    padding: var(--spacing-md);
+  }
+
+  .toss-search-box {
+    flex-direction: column;
+  }
+
+  .toss-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toss-results-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
 } 

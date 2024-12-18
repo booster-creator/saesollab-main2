@@ -38,52 +38,55 @@ function Search() {
   };
 
   return (
-    <div className="search-page">
-      <div className="search-header">
-        <h1>YouTube 데이터 분석</h1>
-        <p>채널과 영상의 성과를 실시간으로 분석하세요</p>
+    <div className="toss-container">
+      <div className="toss-header">
+        <h1>YouTube 분석</h1>
+        <p className="toss-subtitle">채널과 영상의 성과를 실시간으로 분석하세요</p>
       </div>
 
-      <div className="search-section">
-        <div className="search-box">
-          <div className="search-input-wrapper">
-            <i className="search-icon">🔍</i>
+      <div className="toss-search-section">
+        <div className="toss-search-box">
+          <div className="toss-input-wrapper">
+            <svg className="toss-search-icon" /* SVG 코드 *//>
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="분석하고 싶은 YouTube 키워드를 입력하세요"
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              className="toss-input"
             />
           </div>
           <button 
-            onClick={handleSearch} 
+            className={`toss-button ${loading ? 'loading' : ''}`}
+            onClick={handleSearch}
             disabled={loading || !query.trim()}
-            className={loading ? 'loading' : ''}
           >
-            {loading ? '분석 중...' : '분석하기'}
+            {loading ? (
+              <span className="toss-loading-dots">
+                <span>.</span><span>.</span><span>.</span>
+              </span>
+            ) : '분석하기'}
           </button>
         </div>
 
         {searchHistory.length > 0 && (
-          <div className="search-history">
-            <div className="history-header">
-              <h3>최근 검색어</h3>
-              <button className="clear-history" onClick={() => setSearchHistory([])}>
+          <div className="toss-history">
+            <div className="toss-history-header">
+              <span className="toss-label">최근 검색어</span>
+              <button className="toss-text-button" onClick={() => setSearchHistory([])}>
                 전체 삭제
               </button>
             </div>
-            <div className="history-tags">
+            <div className="toss-chips">
               {searchHistory.map((term, index) => (
                 <button
                   key={index}
-                  className="history-tag"
+                  className="toss-chip"
                   onClick={() => {
                     setQuery(term);
                     handleSearch();
                   }}
                 >
-                  <span className="tag-icon">🕒</span>
                   {term}
                 </button>
               ))}
@@ -93,75 +96,69 @@ function Search() {
       </div>
 
       {results.length > 0 && (
-        <div className="results-section">
-          <div className="results-header">
-            <h2>분석 결과</h2>
-            <div className="results-meta">
-              <span>{results.length}개의 결과</span>
-              <select className="sort-select">
-                <option value="tension">노출온도 순</option>
-                <option value="views">조회수 순</option>
-                <option value="subscribers">구독자 순</option>
-              </select>
+        <div className="toss-results">
+          <div className="toss-results-header">
+            <div className="toss-results-info">
+              <h2>분석 결과</h2>
+              <span className="toss-results-count">{results.length}개의 결과</span>
             </div>
+            <select className="toss-select">
+              <option value="tension">노출온도 순</option>
+              <option value="views">조회수 순</option>
+              <option value="subscribers">구독자 순</option>
+            </select>
           </div>
 
-          <div className="results-grid">
+          <div className="toss-grid">
             {results.map((video, index) => (
-              <div key={video.videoId} className="video-card">
-                <div className="rank-badge">#{index + 1}</div>
-                <div className="card-content">
-                  <div className="video-info">
-                    <h3 className="video-title">{video.title}</h3>
-                    <p className="channel-name">{video.channelTitle}</p>
-                  </div>
+              <div key={video.videoId} className="toss-card">
+                <div className="toss-card-rank">#{index + 1}</div>
+                <div className="toss-card-content">
+                  <h3 className="toss-card-title">{video.title}</h3>
+                  <p className="toss-card-channel">{video.channelTitle}</p>
                   
-                  <div className="stats-grid">
-                    <div className="stat-item">
-                      <span className="stat-icon">👁️</span>
-                      <span className="stat-label">조회수</span>
-                      <span className="stat-value">{formatNumber(video.viewCount)}</span>
+                  <div className="toss-stats">
+                    <div className="toss-stat">
+                      <span className="toss-stat-label">조회수</span>
+                      <span className="toss-stat-value">{formatNumber(video.viewCount)}</span>
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-icon">👍</span>
-                      <span className="stat-label">좋아요</span>
-                      <span className="stat-value">{formatNumber(video.likeCount)}</span>
+                    <div className="toss-stat">
+                      <span className="toss-stat-label">좋아요</span>
+                      <span className="toss-stat-value">{formatNumber(video.likeCount)}</span>
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-icon">💬</span>
-                      <span className="stat-label">댓글</span>
-                      <span className="stat-value">{formatNumber(video.commentCount)}</span>
+                    <div className="toss-stat">
+                      <span className="toss-stat-label">댓글</span>
+                      <span className="toss-stat-value">{formatNumber(video.commentCount)}</span>
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-icon">👥</span>
-                      <span className="stat-label">구독자</span>
-                      <span className="stat-value">{formatNumber(video.subscriberCount)}</span>
+                    <div className="toss-stat">
+                      <span className="toss-stat-label">구독자</span>
+                      <span className="toss-stat-value">{formatNumber(video.subscriberCount)}</span>
                     </div>
                   </div>
 
-                  <div className="tension-meter">
-                    <div className="tension-label">
+                  <div className="toss-meter">
+                    <div className="toss-meter-header">
                       <span>노출온도</span>
-                      <span className="tension-value">{video.tension}</span>
+                      <span className="toss-meter-value">{video.tension}</span>
                     </div>
-                    <div className="tension-bar">
+                    <div className="toss-meter-bar">
                       <div 
-                        className="tension-fill" 
+                        className="toss-meter-fill"
                         style={{width: `${Math.min(video.tension * 100, 100)}%`}}
                       />
                     </div>
                   </div>
 
-                  <div className="card-actions">
+                  <div className="toss-actions">
                     <a 
-                      href={video.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="watch-button"
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="toss-button-secondary"
                     >
                       동영상 보기
                     </a>
-                    <button className="analyze-button">
+                    <button className="toss-button-primary">
                       상세 분석
                     </button>
                   </div>
@@ -173,10 +170,10 @@ function Search() {
       )}
 
       {loading && (
-        <div className="loading-overlay">
-          <div className="loading-content">
-            <div className="loading-spinner"></div>
-            <p>데이터를 분석하고 있습니다...</p>
+        <div className="toss-overlay">
+          <div className="toss-loading">
+            <div className="toss-loading-spinner" />
+            <p>데이터를 분석하고 있습니다</p>
           </div>
         </div>
       )}
