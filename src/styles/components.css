@@ -1611,4 +1611,132 @@
   .toss-insights-subtitle {
     font-size: 1.1rem;
   }
+}
+
+/* 로그인 페이지 스타일 */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f9f9f9;
+}
+
+.header {
+  text-align: center;
+  padding: 20px 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container .logo {
+  max-width: 150px;
+  height: auto;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.login-section {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.login-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.social-login {
+  margin-bottom: 20px;
+}
+
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.additional-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 0.85rem;
+}
+
+.additional-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.additional-links a:hover {
+  color: var(--primary);
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #fafafa;
+  border-top: 1px solid var(--border-light);
+}
+
+.footer-nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0 0 10px 0;
+  padding: 0;
+  gap: 15px;
+}
+
+.footer-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+  color: var(--text-primary);
+}
+
+.copyright {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .login-section {
+    padding: 30px 20px;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .footer-nav ul {
+    flex-wrap: wrap;
+  }
 } 
