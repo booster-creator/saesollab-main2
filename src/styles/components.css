@@ -599,4 +599,278 @@
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 검색 페이지 스타일 */
+.search-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.search-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.search-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.search-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.search-section {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.search-box {
+  background: white;
+  border-radius: 16px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.search-icon {
+  font-style: normal;
+  margin-right: 0.8rem;
+  color: #868e96;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  font-size: 1.1rem;
+  padding: 1rem 0;
+  background: transparent;
+}
+
+.search-box input:focus {
+  outline: none;
+}
+
+.search-box button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  background: #3182f6;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-box button:hover:not(:disabled) {
+  background: #1c64f2;
+  transform: translateY(-1px);
+}
+
+.search-box button:disabled {
+  background: #e9ecef;
+  cursor: not-allowed;
+}
+
+.search-box button.loading {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-header h3 {
+  font-size: 0.9rem;
+  color: #868e96;
+  font-weight: 500;
+}
+
+.clear-history {
+  border: none;
+  background: none;
+  color: #868e96;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.clear-history:hover {
+  color: #495057;
+}
+
+.history-tags {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.history-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 20px;
+  background: white;
+  color: #495057;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.history-tag:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+}
+
+.tag-icon {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.results-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.results-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sort-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+  background: white;
+}
+
+.video-info {
+  margin-bottom: 1.5rem;
+}
+
+.channel-name {
+  color: #868e96;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.tension-meter {
+  margin: 1.5rem 0;
+}
+
+.tension-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.tension-value {
+  font-weight: 600;
+  color: #3182f6;
+}
+
+.tension-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tension-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3182f6, #748ffc);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.watch-button, .analyze-button {
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.watch-button {
+  background: #f8f9fa;
+  color: #495057;
+  text-decoration: none;
+}
+
+.analyze-button {
+  background: #3182f6;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.watch-button:hover {
+  background: #e9ecef;
+}
+
+.analyze-button:hover {
+  background: #1c64f2;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-content p {
+  margin-top: 1rem;
+  color: #495057;
 } 
