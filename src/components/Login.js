@@ -31,52 +31,39 @@ function Login() {
 
   return (
     <div className="login-page">
-      <div className="login-background">
-        <img src="/assets/images/pattern.svg" alt="" className="pattern-bg" />
-      </div>
-      
-      <div className="login-container">
+      <div className="login-left">
         <div className="login-content">
-          <div className="login-header">
-            <img src="/assets/images/logo.svg" alt="콘텐츠랩" className="logo" />
-            <h1>콘텐츠랩</h1>
-            <p>YouTube 데이터 분석 플랫폼</p>
+          <div className="login-illustration">
+            <img src="/assets/images/analysis-illustration.svg" alt="" />
           </div>
+          <div className="login-text">
+            <h2>YouTube 데이터 분석으로</h2>
+            <h2>채널 성장을 가속화하세요</h2>
+            <p>지금 시작하고 인사이트를 얻어보세요</p>
+          </div>
+        </div>
+      </div>
 
-          <div className="login-box">
-            <div className="feature-highlights">
-              <div className="feature-item">
-                <img src="/assets/images/analysis.svg" alt="" />
-                <h3>데이터 분석</h3>
-                <p>YouTube 채널과 영상의 성과를 분석하세요</p>
-              </div>
-              <div className="feature-item">
-                <img src="/assets/images/insights.svg" alt="" />
-                <h3>인사이트 도출</h3>
-                <p>데이터 기반의 인사이트를 얻어보세요</p>
-              </div>
-            </div>
-
-            <div className="login-action">
-              <h2>시작하기</h2>
-              <p className="login-description">
-                Google 계정으로 간편하게 시작하세요
-              </p>
-              {error && <div className="error-message">{error}</div>}
-              <div className="google-login-button">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={() => setError('로그인 실패. 다시 시도해주세요.')}
-                  useOneTap
-                  theme="filled_black"
-                  shape="pill"
-                  size="large"
-                  text="signin_with"
-                  locale="ko"
-                  disabled={loading}
-                />
-              </div>
-            </div>
+      <div className="login-right">
+        <div className="login-form">
+          <h1>시작하기</h1>
+          <div className="social-login">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('로그인 실패. 다시 시도해주세요.')}
+              useOneTap
+              theme="outline"
+              size="large"
+              text="signin_with"
+              shape="rectangular"
+              locale="ko"
+              disabled={loading}
+            />
+          </div>
+          {error && <div className="error-message">{error}</div>}
+          <div className="terms-text">
+            <p>계속 진행하면 콘텐츠랩의 <a href="#">서비스 약관</a>과</p>
+            <p><a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주됩니다.</p>
           </div>
         </div>
       </div>

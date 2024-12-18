@@ -1,0 +1,26 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .primary { fill: #3182f6; }
+    .secondary { fill: #748ffc; }
+    .accent { fill: #4dabf7; }
+  </style>
+  
+  <!-- 배경 도형 -->
+  <rect x="50" y="50" width="300" height="200" rx="20" class="primary" opacity="0.1"/>
+  
+  <!-- 그래프 요소들 -->
+  <path d="M100 200 L150 150 L200 180 L250 120 L300 90" 
+        stroke="#3182f6" 
+        fill="none" 
+        stroke-width="3"
+        stroke-linecap="round"/>
+  
+  <!-- 장식용 도형들 -->
+  <circle cx="150" cy="150" r="5" class="primary"/>
+  <circle cx="200" cy="180" r="5" class="secondary"/>
+  <circle cx="250" cy="120" r="5" class="accent"/>
+  
+  <!-- YouTube 아이콘 -->
+  <rect x="160" y="80" width="80" height="50" rx="10" class="primary"/>
+  <polygon points="190,90 190,120 220,105" fill="white"/>
+</svg> 
