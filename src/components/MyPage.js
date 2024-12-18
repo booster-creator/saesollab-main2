@@ -5,20 +5,25 @@ function MyPage() {
   const { user } = useAuth();
 
   return (
-    <div className="mypage">
-      <h1>마이페이지</h1>
-      <div className="profile-section">
-        <h2>프로필 정보</h2>
-        {user && (
-          <div className="profile-info">
-            <p>이메일: {user.email}</p>
-            {/* 추가 사용자 정보 표시 */}
+    <div className="toss-mypage">
+      <div className="toss-profile-header">
+        <div className="toss-profile-info">
+          <img src={user.picture} alt={user.name} className="toss-profile-avatar" />
+          <div>
+            <h1>{user.name}</h1>
+            <p>{user.email}</p>
           </div>
-        )}
+        </div>
       </div>
-      <div className="history-section">
-        <h2>최근 검색 기록</h2>
-        {/* 검색 기록 표시 */}
+
+      <div className="toss-profile-content">
+        <section className="toss-history">
+          {/* 검색 기록 */}
+        </section>
+
+        <section className="toss-settings">
+          {/* 설정 */}
+        </section>
       </div>
     </div>
   );

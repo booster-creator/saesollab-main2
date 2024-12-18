@@ -1,19 +1,25 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Home() {
-  const navigate = useNavigate();
-
   return (
-    <div className="home">
-      <h1>YouTube 데이터 분석 플랫폼</h1>
-      <div className="features">
-        <div className="feature-card" onClick={() => navigate('/search')}>
-          <h3>YouTube 검색 분석</h3>
-          <p>채널과 영상의 성과를 분석하세요</p>
+    <div className="toss-home">
+      <section className="toss-hero">
+        <h1>YouTube 채널 성장을 위한 모든 것</h1>
+        <p>데이터 기반의 인사이트로 채널 성장을 가속화하세요</p>
+        <div className="toss-hero-actions">
+          <Link to="/search" className="toss-button-primary">시작하기</Link>
+          <Link to="/insights" className="toss-button-secondary">인사이트 보기</Link>
         </div>
-        {/* 추가 기능 카드들 */}
-      </div>
+      </section>
+
+      <section className="toss-features">
+        {/* 주요 기능 섹션 */}
+      </section>
+
+      <section className="toss-stats">
+        {/* 통계 섹션 */}
+      </section>
     </div>
   );
 }

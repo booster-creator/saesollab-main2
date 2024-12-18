@@ -1519,4 +1519,96 @@
   .toss-company-info {
     text-align: center;
   }
+}
+
+/* 인사이트 페이지 스타일 */
+.toss-insights {
+  padding: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toss-insights-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.toss-insights-content h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+.toss-insights-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.toss-insights-illustration {
+  width: 100%;
+  max-width: 600px;
+}
+
+.toss-insights-illustration img {
+  width: 100%;
+  height: auto;
+}
+
+.toss-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.toss-insight-card {
+  background: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.toss-insight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.toss-insight-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.toss-insight-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.toss-insight-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .toss-insights-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .toss-insights-content h1 {
+    font-size: 2rem;
+  }
+
+  .toss-insights-subtitle {
+    font-size: 1.1rem;
+  }
 } 
