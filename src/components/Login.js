@@ -33,46 +33,49 @@ function Login() {
     <div className="login-page">
       <div className="login-left">
         <div className="login-content">
-          <div className="login-illustration">
-            <img src="/assets/images/analysis-illustration.svg" alt="" />
+          <div className="login-header">
+            <img src="/assets/images/logo.svg" alt="콘텐츠랩" className="logo" />
+            <h1>콘텐츠랩</h1>
+            <p className="subtitle">YouTube 데이터 분석 플랫폼</p>
           </div>
-          <div className="login-text">
-            <h2>YouTube 데이터 분석으로</h2>
-            <h2>채널 성장을 가속화하세요</h2>
-            <p>지금 시작하고 인사이트를 얻어보세요</p>
+          <div className="login-features">
+            <div className="feature">
+              <div className="feature-icon">📈</div>
+              <h3>실시간 분석</h3>
+              <p>채널과 영상의 성과를 실시간으로 분석하세요</p>
+            </div>
+            <div className="feature">
+              <div className="feature-icon">🎯</div>
+              <h3>맞춤 인사이트</h3>
+              <p>데이터 기반의 맞춤형 인사이트를 제공합니다</p>
+            </div>
           </div>
         </div>
       </div>
-
       <div className="login-right">
-        <div className="login-form">
-          <h1>시작하기</h1>
+        <div className="login-box">
+          <h2>시작하기</h2>
+          <p className="login-description">
+            간편하게 시작하고 강력한 분석 도구를 경험하세요
+          </p>
           <div className="social-login">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError('로그인 실패. 다시 시도해주세요.')}
+              onError={() => setError('로그인 실패')}
               useOneTap
-              theme="outline"
+              theme="filled_blue"
               size="large"
-              text="signin_with"
-              shape="rectangular"
+              shape="pill"
               locale="ko"
-              disabled={loading}
             />
           </div>
           {error && <div className="error-message">{error}</div>}
-          <div className="terms-text">
-            <p>계속 진행하면 콘텐츠랩의 <a href="#">서비스 약관</a>과</p>
-            <p><a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주됩니다.</p>
+          <div className="terms">
+            <p>계속 진행하면 <a href="#">서비스 약관</a>과</p>
+            <p><a href="#">개인정보 처리방침</a>에 동의하는 것으로 간주됩니다</p>
           </div>
         </div>
       </div>
-
-      {loading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner"></div>
-        </div>
-      )}
     </div>
   );
 }
