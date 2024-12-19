@@ -3,7 +3,6 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
 // YouTube API 관련 상수
 const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
-console.log('YouTube API Key:', YOUTUBE_API_KEY);
 
 // 키워드별 메트릭 데이터
 const keywordMetrics = {

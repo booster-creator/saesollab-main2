@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
+      window.location.href = '/';
       return result.user;
     } catch (error) {
       console.error('Login failed:', error);
