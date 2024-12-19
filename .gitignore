@@ -20,3 +20,6 @@
 # Netlify
 .netlify
 netlify/functions/*.js.map
+
+# search_history.csv
+search_history.csv
