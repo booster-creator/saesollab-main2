@@ -11,6 +11,7 @@ function Search() {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [youtubeData, setYoutubeData] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,13 +19,23 @@ function Search() {
 
     setIsLoading(true);
     setError(null);
-    setYoutubeData(null);
+    setResults(null);
+    setSearchResults([]);
 
     try {
       console.log('Analyzing keyword:', keyword);
       const data = await analyzeKeyword(keyword);
       console.log('Analysis results:', data);
       setResults(data);
+      if (data.youtubeData) {
+        setSearchResults([{
+          title: data.youtubeData.video.title,
+          views: data.youtubeData.video.viewCount,
+          likes: data.youtubeData.video.likeCount,
+          comments: data.youtubeData.video.commentCount,
+          url: data.youtubeData.video.url
+        }]);
+      }
     } catch (error) {
       console.error('Search failed:', error);
       setError(error.message || '검색 중 오류가 발생했습니다.');
@@ -32,6 +43,29 @@ function Search() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const renderSearchResults = () => {
+    if (!searchResults.length) return null;
+    
+    return (
+      <div className="youtube-results">
+        <h3>관련 YouTube 영상</h3>
+        {searchResults.map((video, index) => (
+          <div key={index} className="video-item">
+            <h4>{video.title}</h4>
+            <div className="video-stats">
+              <span>조회수: {video.views.toLocaleString()}</span>
+              <span>좋아요: {video.likes.toLocaleString()}</span>
+              <span>댓글: {video.comments.toLocaleString()}</span>
+            </div>
+            <a href={video.url} target="_blank" rel="noopener noreferrer">
+              영상 보기
+            </a>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -77,70 +111,73 @@ function Search() {
       )}
 
       {results && (
-        <div className="metrics-grid">
-          <div className="metric-card">
-            <div className="metric-header">
-              <h3>검색량</h3>
-              <span className="metric-badge">실시간</span>
-            </div>
-            <div className="metric-value">{results.searchVolume}</div>
-            <div className="metric-trend">
-              <span className="trend-value positive">+{results.volumeGrowth}</span>
-              <span className="trend-label">지난달 대비</span>
-            </div>
-          </div>
-
-          <div className="metric-card">
-            <div className="metric-header">
-              <h3>경쟁 강도</h3>
-            </div>
-            <div className="metric-value">{results.competition}</div>
-            <p className="metric-description">
-              현재 약 {results.competitorCount.toLocaleString()}개의 채널이 해당 키워드로 활동 중입니다
-            </p>
-          </div>
-
-          <div className="metric-card">
-            <div className="metric-header">
-              <h3>연관 키워드</h3>
-            </div>
-            <div className="keyword-list">
-              {results.relatedKeywords.map((keyword, index) => (
-                <span key={index} className="keyword-tag">{keyword}</span>
-              ))}
-            </div>
-          </div>
-
-          {youtubeData && (
-            <div className="metric-card youtube-analysis">
+        <>
+          <div className="metrics-grid">
+            <div className="metric-card">
               <div className="metric-header">
-                <h3>YouTube 분석</h3>
+                <h3>검색량</h3>
+                <span className="metric-badge">실시간</span>
               </div>
-              <div className="youtube-metrics">
-                <div className="metric-item">
-                  <span className="label">조회수</span>
-                  <span className="value">{youtubeData.video.viewCount.toLocaleString()}</span>
-                </div>
-                <div className="metric-item">
-                  <span className="label">구독자 수</span>
-                  <span className="value">{youtubeData.channel.subscriberCount.toLocaleString()}</span>
-                </div>
-                <div className="metric-item">
-                  <span className="label">구독자 대비 조회수</span>
-                  <span className="value" data-type="ratio">{youtubeData.metrics.subscriberViewRatio}</span>
-                </div>
-                <div className="metric-item">
-                  <span className="label">조회수 대비 좋아요</span>
-                  <span className="value" data-type="ratio">{youtubeData.metrics.viewLikeRatio}</span>
-                </div>
-                <div className="metric-item">
-                  <span className="label">조회수 대비 댓글</span>
-                  <span className="value" data-type="ratio">{youtubeData.metrics.viewCommentRatio}</span>
-                </div>
+              <div className="metric-value">{results.searchVolume}</div>
+              <div className="metric-trend">
+                <span className="trend-value positive">+{results.volumeGrowth}</span>
+                <span className="trend-label">지난달 대비</span>
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="metric-card">
+              <div className="metric-header">
+                <h3>경쟁 강도</h3>
+              </div>
+              <div className="metric-value">{results.competition}</div>
+              <p className="metric-description">
+                현재 약 {results.competitorCount.toLocaleString()}개의 채널이 해당 키워드로 활동 중입니다
+              </p>
+            </div>
+
+            <div className="metric-card">
+              <div className="metric-header">
+                <h3>연관 키워드</h3>
+              </div>
+              <div className="keyword-list">
+                {results.relatedKeywords.map((keyword, index) => (
+                  <span key={index} className="keyword-tag">{keyword}</span>
+                ))}
+              </div>
+            </div>
+
+            {youtubeData && (
+              <div className="metric-card youtube-analysis">
+                <div className="metric-header">
+                  <h3>YouTube 분석</h3>
+                </div>
+                <div className="youtube-metrics">
+                  <div className="metric-item">
+                    <span className="label">조회수</span>
+                    <span className="value">{youtubeData.video.viewCount.toLocaleString()}</span>
+                  </div>
+                  <div className="metric-item">
+                    <span className="label">구독자 수</span>
+                    <span className="value">{youtubeData.channel.subscriberCount.toLocaleString()}</span>
+                  </div>
+                  <div className="metric-item">
+                    <span className="label">구독자 대비 조회수</span>
+                    <span className="value" data-type="ratio">{youtubeData.metrics.subscriberViewRatio}</span>
+                  </div>
+                  <div className="metric-item">
+                    <span className="label">조회수 대비 좋아요</span>
+                    <span className="value" data-type="ratio">{youtubeData.metrics.viewLikeRatio}</span>
+                  </div>
+                  <div className="metric-item">
+                    <span className="label">조회수 대비 댓글</span>
+                    <span className="value" data-type="ratio">{youtubeData.metrics.viewCommentRatio}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {renderSearchResults()}
+        </>
       )}
     </div>
   );

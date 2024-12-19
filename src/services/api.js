@@ -2,6 +2,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
 
 // YouTube API 관련 상수
 const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+console.log('API Key loaded:', !!YOUTUBE_API_KEY); // true/false로 로드 여부만 확인
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
 
 // 키워드별 메트릭 데이터
@@ -65,8 +66,7 @@ async function fetchChannelDetails(channelId) {
 // YouTube 검색 API 함수 추가
 async function searchYouTubeVideos(keyword) {
   if (!YOUTUBE_API_KEY) {
-    console.error('YouTube API key is not set');
-    throw new Error('YouTube API 키가 설정되지 않았습니다.');
+    throw new Error('YouTube API 키가 설정되지 않았습니다. 관리자에게 문의하세요.');
   }
   const url = `${YOUTUBE_API_BASE_URL}/search?key=${YOUTUBE_API_KEY}&q=${keyword}&part=snippet&type=video&maxResults=5`;
   const response = await fetch(url);
@@ -80,7 +80,6 @@ async function searchYouTubeVideos(keyword) {
 
 export async function analyzeKeyword(keyword) {
   try {
-    await new Promise(resolve => setTimeout(resolve, 800));
     const metrics = keywordMetrics[keyword] || defaultMetrics;
     
     try {
@@ -89,14 +88,17 @@ export async function analyzeKeyword(keyword) {
         const topVideo = searchResults[0];
         const videoAnalysis = await analyzeYouTubeData(topVideo.id.videoId);
         return {
-          ...metrics,
+          searchVolume: metrics.searchVolume,
+          volumeGrowth: metrics.volumeGrowth,
+          competition: metrics.competition,
+          competitorCount: metrics.competitorCount,
+          relatedKeywords: metrics.relatedKeywords,
           keyword,
           youtubeData: videoAnalysis
         };
       }
     } catch (youtubeError) {
       console.error('YouTube analysis failed:', youtubeError);
-      // YouTube 분석 실패해도 기본 메트릭은 반환
     }
 
     return {
