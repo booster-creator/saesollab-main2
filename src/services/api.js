@@ -74,6 +74,7 @@ async function searchYouTubeVideos(keyword) {
     throw new Error('Failed to search videos');
   }
   const data = await response.json();
+  console.log('Search response:', data); // 디버깅용
   return data.items;
 }
 
@@ -82,17 +83,20 @@ export async function analyzeKeyword(keyword) {
     await new Promise(resolve => setTimeout(resolve, 800));
     const metrics = keywordMetrics[keyword] || defaultMetrics;
     
-    // YouTube 검색 결과 가져오기
-    const searchResults = await searchYouTubeVideos(keyword);
-    const topVideo = searchResults[0]; // 첫 번째 비디오 사용
-
-    if (topVideo) {
-      const videoAnalysis = await analyzeYouTubeData(topVideo.id.videoId);
-      return {
-        ...metrics,
-        keyword,
-        youtubeData: videoAnalysis
-      };
+    try {
+      const searchResults = await searchYouTubeVideos(keyword);
+      if (searchResults && searchResults.length > 0) {
+        const topVideo = searchResults[0];
+        const videoAnalysis = await analyzeYouTubeData(topVideo.id.videoId);
+        return {
+          ...metrics,
+          keyword,
+          youtubeData: videoAnalysis
+        };
+      }
+    } catch (youtubeError) {
+      console.error('YouTube analysis failed:', youtubeError);
+      // YouTube 분석 실패해도 기본 메트릭은 반환
     }
 
     return {
@@ -109,6 +113,9 @@ export async function analyzeKeyword(keyword) {
 export async function analyzeYouTubeData(videoId) {
   try {
     const videoDetails = await fetchVideoDetails(videoId);
+    if (!videoDetails) {
+      throw new Error('비디오 정보를 찾을 수 없습니다.');
+    }
     const channelDetails = await fetchChannelDetails(videoDetails.snippet.channelId);
     
     const stats = videoDetails.statistics;

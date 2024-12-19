@@ -24,31 +24,10 @@ function Search() {
       console.log('Analyzing keyword:', keyword);
       const data = await analyzeKeyword(keyword);
       console.log('Analysis results:', data);
-      
-      // 결과 표시
       setResults(data);
-      
-      // 2. YouTube 데이터 분석 (테스트용 videoId)
-      const videoId = 'test_video_id'; // 실제 구현시 검색 결과에서 가져올 videoId
-      const ytData = await analyzeYouTubeData(videoId);
-      setYoutubeData(ytData);
-      
-      // Firebase에 저장
-      if (user) {
-        console.log('Saving to Firebase...');
-        await addDoc(collection(db, 'search_history'), {
-          userId: user.uid,
-          keyword,
-          results: data,
-          youtubeData: ytData,
-          timestamp: new Date()
-        });
-        console.log('Successfully saved to Firebase');
-      }
-
     } catch (error) {
       console.error('Search failed:', error);
-      setError('검색 중 오류가 발생했습니다. 다시 시도해주세요.');
+      setError(error.message || '검색 중 오류가 발생했습니다.');
       setResults(null);
     } finally {
       setIsLoading(false);
