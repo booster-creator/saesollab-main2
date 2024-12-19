@@ -74,33 +74,61 @@ async function searchYouTubeVideos(keyword) {
   if (!YOUTUBE_API_KEY) {
     throw new Error('YouTube API 키가 설정되지 않았습니다. 관리자에게 문의하세요.');
   }
-  const url = `${YOUTUBE_API_BASE_URL}/search?key=${YOUTUBE_API_KEY}&q=${keyword}&part=snippet&type=video&maxResults=5`;
+  const url = `${YOUTUBE_API_BASE_URL}/search?key=${YOUTUBE_API_KEY}&q=${keyword}&part=snippet&type=video&maxResults=15`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Failed to search videos');
   }
   const data = await response.json();
-  console.log('Search response:', data); // 디버깅용
   return data.items;
+}
+
+async function getRelatedKeywords(keyword) {
+  const searchResults = await searchYouTubeVideos(keyword);
+  const relatedTerms = new Set();
+  
+  searchResults.forEach(video => {
+    // 제목과 설명에서 키워드 추출
+    const terms = video.snippet.title.split(/\s+/)
+      .concat(video.snippet.description.split(/\s+/))
+      .filter(term => term.length > 1)
+      .map(term => term.toLowerCase());
+    
+    terms.forEach(term => relatedTerms.add(term));
+  });
+
+  return Array.from(relatedTerms).slice(0, 10); // 상위 10개만 반환
 }
 
 export async function analyzeKeyword(keyword) {
   try {
+    const [searchResults, relatedKeywords] = await Promise.all([
+      searchYouTubeVideos(keyword),
+      getRelatedKeywords(keyword)
+    ]);
+
     const metrics = keywordMetrics[keyword] || defaultMetrics;
     
     try {
-      const searchResults = await searchYouTubeVideos(keyword);
       if (searchResults && searchResults.length > 0) {
-        const topVideo = searchResults[0];
-        const videoAnalysis = await analyzeYouTubeData(topVideo.id.videoId);
+        const videoAnalyses = await Promise.all(
+          searchResults.map(async (video) => {
+            const analysis = await analyzeYouTubeData(video.id.videoId);
+            return {
+              ...analysis,
+              thumbnail: video.snippet.thumbnails.medium.url
+            };
+          })
+        );
+
         return {
           searchVolume: metrics.searchVolume,
           volumeGrowth: metrics.volumeGrowth,
           competition: metrics.competition,
           competitorCount: metrics.competitorCount,
-          relatedKeywords: metrics.relatedKeywords,
+          relatedKeywords: relatedKeywords,
           keyword,
-          youtubeData: videoAnalysis
+          youtubeData: videoAnalyses
         };
       }
     } catch (youtubeError) {

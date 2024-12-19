@@ -35,3 +35,28 @@
 .metric-item .value[data-type="ratio"] {
   color: #4CAF50;  /* 초록색 계열 */
 } 
+
+.youtube-results {
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.video-item {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.video-thumbnail {
+  width: 200px;
+  margin-right: 15px;
+}
+
+.video-info {
+  flex: 1;
+}
