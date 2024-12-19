@@ -27,14 +27,19 @@ function Search() {
       const data = await analyzeKeyword(keyword);
       console.log('Analysis results:', data);
       setResults(data);
-      if (data.youtubeData) {
-        setSearchResults([{
-          title: data.youtubeData.video.title,
-          views: data.youtubeData.video.viewCount,
-          likes: data.youtubeData.video.likeCount,
-          comments: data.youtubeData.video.commentCount,
-          url: data.youtubeData.video.url
-        }]);
+
+      if (data.youtubeData && Array.isArray(data.youtubeData)) {
+        const formattedResults = data.youtubeData.map(item => ({
+          title: item.video.title,
+          views: item.video.viewCount,
+          likes: item.video.likeCount,
+          comments: item.video.commentCount,
+          url: item.video.url,
+          thumbnail: item.thumbnail,
+          channelTitle: item.channel.title,
+          publishedAt: item.video.publishedAt
+        }));
+        setSearchResults(formattedResults);
       }
     } catch (error) {
       console.error('Search failed:', error);
@@ -53,15 +58,23 @@ function Search() {
         <h3>관련 YouTube 영상</h3>
         {searchResults.map((video, index) => (
           <div key={index} className="video-item">
-            <h4>{video.title}</h4>
-            <div className="video-stats">
-              <span>조회수: {video.views.toLocaleString()}</span>
-              <span>좋아요: {video.likes.toLocaleString()}</span>
-              <span>댓글: {video.comments.toLocaleString()}</span>
+            <img 
+              src={video.thumbnail} 
+              alt={video.title} 
+              className="video-thumbnail"
+            />
+            <div className="video-info">
+              <h4>{video.title}</h4>
+              <p className="channel-title">{video.channelTitle}</p>
+              <div className="video-stats">
+                <span>조회수: {video.views.toLocaleString()}</span>
+                <span>좋아요: {video.likes.toLocaleString()}</span>
+                <span>댓글: {video.comments.toLocaleString()}</span>
+              </div>
+              <a href={video.url} target="_blank" rel="noopener noreferrer" className="video-link">
+                영상 보기
+              </a>
             </div>
-            <a href={video.url} target="_blank" rel="noopener noreferrer">
-              영상 보기
-            </a>
           </div>
         ))}
       </div>
