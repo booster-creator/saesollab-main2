@@ -2,7 +2,10 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
 
 // YouTube API 관련 상수
 const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
-console.log('API Key loaded:', !!YOUTUBE_API_KEY); // true/false로 로드 여부만 확인
+if (!YOUTUBE_API_KEY) {
+  console.error('YouTube API key is not loaded from environment variables');
+}
+console.log('API Key status:', !!YOUTUBE_API_KEY);
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
 
 // 키워드별 메트릭 데이터
@@ -44,6 +47,9 @@ const defaultMetrics = {
 
 // YouTube API 관련 함수 추가
 async function fetchVideoDetails(videoId) {
+  if (!videoId) {
+    throw new Error('Video ID is required');
+  }
   const url = `${YOUTUBE_API_BASE_URL}/videos?key=${YOUTUBE_API_KEY}&id=${videoId}&part=statistics,snippet`;
   const response = await fetch(url);
   if (!response.ok) {
