@@ -1,180 +1,166 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { analyzeKeyword, analyzeYouTubeData } from '../services/api';
+import { db } from '../services/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 function Search() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchHistory, setSearchHistory] = useState([]);
+  const { user } = useAuth();
+  const [keyword, setKeyword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+  const [youtubeData, setYoutubeData] = useState(null);
 
-  useEffect(() => {
-    const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-    setSearchHistory(history);
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!keyword.trim()) return;
 
-  const handleSearch = async () => {
-    if (!query.trim()) return;
-    
-    setLoading(true);
+    setIsLoading(true);
+    setError(null);
+    setYoutubeData(null);
+
     try {
-      const response = await axios.post('/.netlify/functions/youtube', {
-        query,
-        maxResults: 30
-      });
-      setResults(response.data);
+      console.log('Analyzing keyword:', keyword);
+      const data = await analyzeKeyword(keyword);
+      console.log('Analysis results:', data);
+      
+      // 결과 표시
+      setResults(data);
+      
+      // 2. YouTube 데이터 분석 (테스트용 videoId)
+      const videoId = 'test_video_id'; // 실제 구현시 검색 결과에서 가져올 videoId
+      const ytData = await analyzeYouTubeData(videoId);
+      setYoutubeData(ytData);
+      
+      // Firebase에 저장
+      if (user) {
+        console.log('Saving to Firebase...');
+        await addDoc(collection(db, 'search_history'), {
+          userId: user.uid,
+          keyword,
+          results: data,
+          youtubeData: ytData,
+          timestamp: new Date()
+        });
+        console.log('Successfully saved to Firebase');
+      }
 
-      // 검색 기록 업데이트
-      const newHistory = [query, ...searchHistory.filter(item => item !== query)].slice(0, 5);
-      setSearchHistory(newHistory);
-      localStorage.setItem('searchHistory', JSON.stringify(newHistory));
     } catch (error) {
-      console.error('검색 실패:', error);
+      console.error('Search failed:', error);
+      setError('검색 중 오류가 발생했습니다. 다시 시도해주세요.');
+      setResults(null);
+    } finally {
+      setIsLoading(false);
     }
-    setLoading(false);
-  };
-
-  const formatNumber = (num) => {
-    return new Intl.NumberFormat('ko-KR').format(num);
   };
 
   return (
-    <div className="toss-container">
-      <div className="toss-header">
-        <h1>YouTube 분석</h1>
-        <p className="toss-subtitle">채널과 영상의 성과를 실시간으로 분석하세요</p>
-      </div>
+    <div className="search-page">
+      <header className="search-header">
+        <h1>검색 분석</h1>
+        <p>YouTube 검색 데이터를 분석하여 채널 성장에 도움이 되는 인사이트를 제공합니다</p>
+      </header>
 
-      <div className="toss-search-section">
-        <div className="toss-search-box">
-          <div className="toss-input-wrapper">
-            <svg className="toss-search-icon" /* SVG 코드 *//>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="분석하고 싶은 YouTube 키워드를 입력하세요"
-              className="toss-input"
-            />
-          </div>
-          <button 
-            className={`toss-button ${loading ? 'loading' : ''}`}
-            onClick={handleSearch}
-            disabled={loading || !query.trim()}
-          >
-            {loading ? (
-              <span className="toss-loading-dots">
-                <span>.</span><span>.</span><span>.</span>
-              </span>
-            ) : '분석하기'}
-          </button>
+      <form className="search-form" onSubmit={handleSubmit}>
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="분석하고 싶은 키워드를 입력하세요"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            disabled={isLoading}
+          />
+          {keyword && (
+            <button 
+              type="button" 
+              className="clear-button"
+              onClick={() => setKeyword('')}
+            >
+              ✕
+            </button>
+          )}
         </div>
+        <button 
+          type="submit" 
+          className="search-button"
+          disabled={isLoading || !keyword.trim()}
+        >
+          {isLoading ? '분석 중...' : '분석하기'}
+        </button>
+      </form>
 
-        {searchHistory.length > 0 && (
-          <div className="toss-history">
-            <div className="toss-history-header">
-              <span className="toss-label">최근 검색어</span>
-              <button className="toss-text-button" onClick={() => setSearchHistory([])}>
-                전체 삭제
-              </button>
-            </div>
-            <div className="toss-chips">
-              {searchHistory.map((term, index) => (
-                <button
-                  key={index}
-                  className="toss-chip"
-                  onClick={() => {
-                    setQuery(term);
-                    handleSearch();
-                  }}
-                >
-                  {term}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {results.length > 0 && (
-        <div className="toss-results">
-          <div className="toss-results-header">
-            <div className="toss-results-info">
-              <h2>분석 결과</h2>
-              <span className="toss-results-count">{results.length}개의 결과</span>
-            </div>
-            <select className="toss-select">
-              <option value="tension">노출온도 순</option>
-              <option value="views">조회수 순</option>
-              <option value="subscribers">구독자 순</option>
-            </select>
-          </div>
-
-          <div className="toss-grid">
-            {results.map((video, index) => (
-              <div key={video.videoId} className="toss-card">
-                <div className="toss-card-rank">#{index + 1}</div>
-                <div className="toss-card-content">
-                  <h3 className="toss-card-title">{video.title}</h3>
-                  <p className="toss-card-channel">{video.channelTitle}</p>
-                  
-                  <div className="toss-stats">
-                    <div className="toss-stat">
-                      <span className="toss-stat-label">조회수</span>
-                      <span className="toss-stat-value">{formatNumber(video.viewCount)}</span>
-                    </div>
-                    <div className="toss-stat">
-                      <span className="toss-stat-label">좋아요</span>
-                      <span className="toss-stat-value">{formatNumber(video.likeCount)}</span>
-                    </div>
-                    <div className="toss-stat">
-                      <span className="toss-stat-label">댓글</span>
-                      <span className="toss-stat-value">{formatNumber(video.commentCount)}</span>
-                    </div>
-                    <div className="toss-stat">
-                      <span className="toss-stat-label">구독자</span>
-                      <span className="toss-stat-value">{formatNumber(video.subscriberCount)}</span>
-                    </div>
-                  </div>
-
-                  <div className="toss-meter">
-                    <div className="toss-meter-header">
-                      <span>노출온도</span>
-                      <span className="toss-meter-value">{video.tension}</span>
-                    </div>
-                    <div className="toss-meter-bar">
-                      <div 
-                        className="toss-meter-fill"
-                        style={{width: `${Math.min(video.tension * 100, 100)}%`}}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="toss-actions">
-                    <a 
-                      href={video.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="toss-button-secondary"
-                    >
-                      동영상 보기
-                    </a>
-                    <button className="toss-button-primary">
-                      상세 분석
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {error && (
+        <div className="error-message">
+          {error}
         </div>
       )}
 
-      {loading && (
-        <div className="toss-overlay">
-          <div className="toss-loading">
-            <div className="toss-loading-spinner" />
-            <p>데이터를 분석하고 있습니다</p>
+      {results && (
+        <div className="metrics-grid">
+          <div className="metric-card">
+            <div className="metric-header">
+              <h3>검색량</h3>
+              <span className="metric-badge">실시간</span>
+            </div>
+            <div className="metric-value">{results.searchVolume}</div>
+            <div className="metric-trend">
+              <span className="trend-value positive">+{results.volumeGrowth}</span>
+              <span className="trend-label">지난달 대비</span>
+            </div>
           </div>
+
+          <div className="metric-card">
+            <div className="metric-header">
+              <h3>경쟁 강도</h3>
+            </div>
+            <div className="metric-value">{results.competition}</div>
+            <p className="metric-description">
+              현재 약 {results.competitorCount.toLocaleString()}개의 채널이 해당 키워드로 활동 중입니다
+            </p>
+          </div>
+
+          <div className="metric-card">
+            <div className="metric-header">
+              <h3>연관 키워드</h3>
+            </div>
+            <div className="keyword-list">
+              {results.relatedKeywords.map((keyword, index) => (
+                <span key={index} className="keyword-tag">{keyword}</span>
+              ))}
+            </div>
+          </div>
+
+          {youtubeData && (
+            <div className="metric-card youtube-analysis">
+              <div className="metric-header">
+                <h3>YouTube 분석</h3>
+              </div>
+              <div className="youtube-metrics">
+                <div className="metric-item">
+                  <span className="label">조회수</span>
+                  <span className="value">{youtubeData.video.viewCount.toLocaleString()}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="label">구독자 수</span>
+                  <span className="value">{youtubeData.channel.subscriberCount.toLocaleString()}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="label">구독자 대비 조회수</span>
+                  <span className="value" data-type="ratio">{youtubeData.metrics.subscriberViewRatio}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="label">조회수 대비 좋아요</span>
+                  <span className="value" data-type="ratio">{youtubeData.metrics.viewLikeRatio}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="label">조회수 대비 댓글</span>
+                  <span className="value" data-type="ratio">{youtubeData.metrics.viewCommentRatio}</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

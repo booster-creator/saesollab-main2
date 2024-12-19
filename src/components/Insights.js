@@ -2,34 +2,81 @@ import React from 'react';
 
 function Insights() {
   return (
-    <div className="toss-insights">
-      <div className="toss-insights-hero">
-        <div className="toss-insights-content">
-          <h1>YouTube 데이터로 보는 인사이트</h1>
-          <p className="toss-insights-subtitle">
-            채널과 영상의 성과를 분석하여 성장 전략을 제시합니다
+    <div className="insights-page">
+      <header className="page-header">
+        <div className="page-header-content">
+          <h1 className="page-title">인사이트</h1>
+          <p className="page-description">
+            YouTube 트렌드와 성장 기회를 발견하세요
           </p>
         </div>
-        <div className="toss-insights-illustration">
-          <img src="/assets/images/insights-hero.svg" alt="" />
-        </div>
-      </div>
+      </header>
 
-      <div className="toss-insights-grid">
-        <div className="toss-insight-card">
-          <div className="toss-insight-icon">📈</div>
-          <h3>실시간 트렌드</h3>
-          <p>인기 있는 키워드와 주제를 실시간으로 분석합니다</p>
-        </div>
-        <div className="toss-insight-card">
-          <div className="toss-insight-icon">🎯</div>
-          <h3>맞춤형 전략</h3>
-          <p>채널 특성에 맞는 최적의 성장 전략을 제안합니다</p>
-        </div>
-        <div className="toss-insight-card">
-          <div className="toss-insight-icon">📊</div>
-          <h3>상세 분석</h3>
-          <p>조회수, 구독자, 수익 등 핵심 지표를 분석합니다</p>
+      <div className="insights-content">
+        <div className="insights-grid">
+          <div className="insight-card featured">
+            <div className="insight-header">
+              <span className="insight-badge">주간 트렌드</span>
+              <time className="insight-date">2024년 1월</time>
+            </div>
+            <h2 className="insight-title">
+              쇼츠 콘텐츠의 성장세가 두드러집니다
+            </h2>
+            <p className="insight-description">
+              지난 달 대비 쇼츠 콘텐츠의 조회수가 45% 증가했습니다. 특히 1분 이내의 짧은 콘텐츠가 높은 성과를 보이고 있습니다.
+            </p>
+            <div className="insight-stats">
+              <div className="stat-item">
+                <span className="stat-label">평균 조회수</span>
+                <span className="stat-value">+45%</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">참여율</span>
+                <span className="stat-value">12.3%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="insight-card">
+            <div className="insight-header">
+              <span className="insight-badge">카테고리 분석</span>
+            </div>
+            <h3 className="insight-title">
+              성장하는 카테고리 TOP 3
+            </h3>
+            <ul className="trend-list">
+              <li className="trend-item">
+                <span className="trend-rank">1</span>
+                <span className="trend-name">테크</span>
+                <span className="trend-value positive">+23%</span>
+              </li>
+              <li className="trend-item">
+                <span className="trend-rank">2</span>
+                <span className="trend-name">교육</span>
+                <span className="trend-value positive">+18%</span>
+              </li>
+              <li className="trend-item">
+                <span className="trend-rank">3</span>
+                <span className="trend-name">요리</span>
+                <span className="trend-value positive">+15%</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="insight-card">
+            <div className="insight-header">
+              <span className="insight-badge">시청자 분석</span>
+            </div>
+            <h3 className="insight-title">
+              주요 시청 시간대
+            </h3>
+            <div className="time-chart">
+              {/* 차트 컴포넌트 추가 예정 */}
+              <div className="chart-placeholder">
+                시간대별 시청자 분포 차트
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

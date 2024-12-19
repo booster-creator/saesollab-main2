@@ -1,0 +1,4 @@
+id,user_id,keyword,results,created_at
+1,test_user_1,브이로그,"{""searchVolume"":""2.3M"",""volumeGrowth"":""12.3%"",""competition"":""중간"",""competitorCount"":1200,""relatedKeywords"":[""일상"",""먹방"",""여행"",""리뷰"",""게임""]}",2024-03-20 10:00:00+00
+2,test_user_1,먹방,"{""searchVolume"":""1.8M"",""volumeGrowth"":""8.5%"",""competition"":""높음"",""competitorCount"":2300,""relatedKeywords"":[""맛집"",""요리"",""브이로그"",""레시피"",""mukbang""]}",2024-03-20 11:30:00+00
+3,test_user_1,게임,"{""searchVolume"":""3.1M"",""volumeGrowth"":""15.2%"",""competition"":""매우 높음"",""competitorCount"":3500,""relatedKeywords"":[""리뷰"",""실황"",""공략"",""스트리밍"",""하이라이트""]}",2024-03-20 14:20:00+00 
