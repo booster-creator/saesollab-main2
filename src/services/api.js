@@ -2,7 +2,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
 
 // YouTube API 관련 상수
 const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
-const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
+console.log('YouTube API Key:', YOUTUBE_API_KEY); // 키 값 확인
 
 // 키워드별 메트릭 데이터
 const keywordMetrics = {
@@ -64,6 +64,10 @@ async function fetchChannelDetails(channelId) {
 
 // YouTube 검색 API 함수 추가
 async function searchYouTubeVideos(keyword) {
+  if (!YOUTUBE_API_KEY) {
+    console.error('YouTube API key is not set');
+    throw new Error('YouTube API 키가 설정되지 않았습니다.');
+  }
   const url = `${YOUTUBE_API_BASE_URL}/search?key=${YOUTUBE_API_KEY}&q=${keyword}&part=snippet&type=video&maxResults=5`;
   const response = await fetch(url);
   if (!response.ok) {
