@@ -62,12 +62,34 @@ async function fetchChannelDetails(channelId) {
   return data.items[0];
 }
 
+// YouTube 검색 API 함수 추가
+async function searchYouTubeVideos(keyword) {
+  const url = `${YOUTUBE_API_BASE_URL}/search?key=${YOUTUBE_API_KEY}&q=${keyword}&part=snippet&type=video&maxResults=5`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to search videos');
+  }
+  const data = await response.json();
+  return data.items;
+}
+
 export async function analyzeKeyword(keyword) {
   try {
     await new Promise(resolve => setTimeout(resolve, 800));
-
-    // 키워드별 메트릭 반환 또는 기본값 사용
     const metrics = keywordMetrics[keyword] || defaultMetrics;
+    
+    // YouTube 검색 결과 가져오기
+    const searchResults = await searchYouTubeVideos(keyword);
+    const topVideo = searchResults[0]; // 첫 번째 비디오 사용
+
+    if (topVideo) {
+      const videoAnalysis = await analyzeYouTubeData(topVideo.id.videoId);
+      return {
+        ...metrics,
+        keyword,
+        youtubeData: videoAnalysis
+      };
+    }
 
     return {
       ...metrics,
