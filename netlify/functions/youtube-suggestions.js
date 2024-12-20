@@ -1,10 +1,8 @@
 const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
-  // CORS 헤더 설정
   const headers = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
   };
 
@@ -18,13 +16,12 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 캐싱을 위한 헤더 추가
     const response = await fetch(
       `https://suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=${encodeURIComponent(keyword)}`,
       {
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'Mozilla/5.0' // 필요한 경우
+          'User-Agent': 'Mozilla/5.0'
         }
       }
     );

@@ -53,14 +53,19 @@ function Search() {
     }
   };
 
+  const calculateEngagementRate = (likes = 0, comments = 0, views = 0) => {
+    if (!views) return 0;
+    return ((likes + comments) / views * 100).toFixed(2);
+  };
+
   const renderSearchResults = () => {
-    if (!searchResults.length) return null;
+    if (!searchResults?.length) return null;
     
     return (
       <div className="youtube-results">
         <h3>관련 YouTube 영상</h3>
         {searchResults.map((video, index) => (
-          <div key={index} className="video-item" style={{ borderLeft: `4px solid ${video.tensionColor}` }}>
+          <div key={index} className="video-item" style={{ borderLeft: `4px solid ${video.tensionColor || '#ddd'}` }}>
             <img src={video.thumbnail} alt={video.title} className="video-thumbnail" />
             <div className="video-info">
               <h4>{video.title}</h4>
@@ -69,17 +74,14 @@ function Search() {
                 <span>조회수: {video.views?.toLocaleString() || '0'}</span>
                 <span>좋아요: {video.likes?.toLocaleString() || '0'}</span>
                 <span>댓글: {video.comments?.toLocaleString() || '0'}</span>
-                <span className="tension-badge" style={{ backgroundColor: video.tensionColor }}>
+                <span className="tension-badge" style={{ backgroundColor: video.tensionColor || '#ddd' }}>
                   노출 온도: {video.tensionLevel || '측정 중'}
                 </span>
               </div>
               <div className="engagement-stats">
-                <span>구독자 대비 조회수: {video.metrics.subscriberViewRatio}</span>
-                <span>상호작용률: {((video.likes + video.comments) / video.views * 100).toFixed(2)}%</span>
+                <span>구독자 대비 조회수: {video.metrics?.subscriberViewRatio || 'N/A'}</span>
+                <span>상호작용률: {calculateEngagementRate(video.likes, video.comments, video.views)}%</span>
               </div>
-              <a href={video.url} target="_blank" rel="noopener noreferrer" className="video-link">
-                영상 보기
-              </a>
             </div>
           </div>
         ))}
