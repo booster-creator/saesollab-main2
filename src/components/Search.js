@@ -26,22 +26,23 @@ function Search() {
       console.log('Analyzing keyword:', keyword);
       const data = await analyzeKeyword(keyword);
       console.log('Analysis results:', data);
-      setResults(data);
 
       if (data.youtubeData && Array.isArray(data.youtubeData)) {
         const formattedResults = data.youtubeData.map(item => ({
-          title: item.video.title,
-          views: item.video.viewCount,
-          likes: item.video.likeCount,
-          comments: item.video.commentCount,
-          url: item.video.url,
-          thumbnail: item.thumbnail,
-          channelTitle: item.channel.title,
-          publishedAt: item.video.publishedAt,
-          tension: item.tension,
-          tensionLevel: item.tensionLevel,
-          tensionColor: item.tensionColor
+          title: item.video?.title || '',
+          views: item.video?.viewCount || 0,
+          likes: item.video?.likeCount || 0,
+          comments: item.video?.commentCount || 0,
+          url: item.video?.url || '',
+          thumbnail: item.thumbnail || '',
+          channelTitle: item.channel?.title || '',
+          metrics: item.metrics || {},
+          tension: item.tension || 0,
+          tensionLevel: item.tensionLevel || '측정 중',
+          tensionColor: item.tensionColor || '#ddd'
         }));
+        
+        setResults(data);
         setSearchResults(formattedResults);
       }
     } catch (error) {
