@@ -100,10 +100,31 @@ async function getRelatedKeywords(keyword) {
   return Array.from(relatedTerms).slice(0, 10); // 상위 10개만 반환
 }
 
+// YouTube 검색어 자동완성 API 함수 추가
+async function getYouTubeSuggestions(keyword) {
+  try {
+    const response = await fetch(
+      `/.netlify/functions/youtube-suggestions?keyword=${encodeURIComponent(keyword)}`
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch suggestions');
+    }
+
+    const data = await response.json();
+    return data.suggestions;
+  } catch (error) {
+    console.error('Suggestions API Error:', error);
+    return [];
+  }
+}
+
 export async function analyzeKeyword(keyword) {
   try {
-    const [searchResults, relatedKeywords] = await Promise.all([
+    // 검색어 자동완성과 기존 분석을 병렬로 실행
+    const [searchResults, suggestions, relatedKeywords] = await Promise.all([
       searchYouTubeVideos(keyword),
+      getYouTubeSuggestions(keyword),
       getRelatedKeywords(keyword)
     ]);
 
@@ -126,7 +147,8 @@ export async function analyzeKeyword(keyword) {
           volumeGrowth: metrics.volumeGrowth,
           competition: metrics.competition,
           competitorCount: metrics.competitorCount,
-          relatedKeywords: relatedKeywords,
+          relatedKeywords: suggestions, // 자동완성 결과로 대체
+          suggestedKeywords: suggestions.slice(0, 10), // 상위 10개 추천 검색어
           keyword,
           youtubeData: videoAnalyses
         };
