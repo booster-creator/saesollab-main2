@@ -119,48 +119,72 @@ async function getYouTubeSuggestions(keyword) {
   }
 }
 
+// 매력도(Tension) 계산 함수 추가
+function calculateTension(video) {
+  const {
+    viewCount,
+    subscriberCount,
+    likeCount,
+    commentCount
+  } = video;
+
+  // 구독자 수 대비 조회수 비율
+  const viewSubRatio = subscriberCount > 0 ? (viewCount / subscriberCount) : 0;
+  // 조회수 대비 상호작용(좋아요 + 댓글) 비율
+  const engagementRatio = viewCount > 0 ? ((likeCount + commentCount) / viewCount) : 0;
+
+  // 종합 매력도 점수 (0-100)
+  return Math.min(100, (viewSubRatio * 50) + (engagementRatio * 50));
+}
+
+// 매력도 등급 계산
+function getTensionLevel(tension) {
+  if (tension >= 80) return { level: '매우 높거움', color: '#FF4444' };
+  if (tension >= 60) return { level: '뜨거움', color: '#FF8C00' };
+  if (tension >= 40) return { level: '적정', color: '#FFD700' };
+  if (tension >= 20) return { level: '미온', color: '#98FB98' };
+  return { level: '차가움', color: '#87CEEB' };
+}
+
 export async function analyzeKeyword(keyword) {
   try {
-    // 검색어 자동완성과 기존 분석을 병렬로 실행
-    const [searchResults, suggestions, relatedKeywords] = await Promise.all([
+    const [searchResults, suggestions] = await Promise.all([
       searchYouTubeVideos(keyword),
-      getYouTubeSuggestions(keyword),
-      getRelatedKeywords(keyword)
+      getYouTubeSuggestions(keyword)
     ]);
 
-    const metrics = keywordMetrics[keyword] || defaultMetrics;
-    
-    try {
-      if (searchResults && searchResults.length > 0) {
-        const videoAnalyses = await Promise.all(
-          searchResults.map(async (video) => {
-            const analysis = await analyzeYouTubeData(video.id.videoId);
-            return {
-              ...analysis,
-              thumbnail: video.snippet.thumbnails.medium.url
-            };
-          })
-        );
+    if (searchResults && searchResults.length > 0) {
+      // 각 비디오의 상세 정보와 매력도 계산
+      const videoAnalyses = await Promise.all(
+        searchResults.map(async (video) => {
+          const analysis = await analyzeYouTubeData(video.id.videoId);
+          const tension = calculateTension({
+            viewCount: analysis.video.viewCount,
+            subscriberCount: analysis.channel.subscriberCount,
+            likeCount: analysis.video.likeCount,
+            commentCount: analysis.video.commentCount
+          });
+          const tensionInfo = getTensionLevel(tension);
 
-        return {
-          searchVolume: metrics.searchVolume,
-          volumeGrowth: metrics.volumeGrowth,
-          competition: metrics.competition,
-          competitorCount: metrics.competitorCount,
-          relatedKeywords: suggestions, // 자동완성 결과로 대체
-          suggestedKeywords: suggestions.slice(0, 10), // 상위 10개 추천 검색어
-          keyword,
-          youtubeData: videoAnalyses
-        };
-      }
-    } catch (youtubeError) {
-      console.error('YouTube analysis failed:', youtubeError);
+          return {
+            ...analysis,
+            thumbnail: video.snippet.thumbnails.medium.url,
+            tension,
+            tensionLevel: tensionInfo.level,
+            tensionColor: tensionInfo.color
+          };
+        })
+      );
+
+      // 매력도 기준으로 정렬
+      videoAnalyses.sort((a, b) => b.tension - a.tension);
+
+      return {
+        keyword,
+        suggestedKeywords: suggestions.slice(0, 10),
+        youtubeData: videoAnalyses
+      };
     }
-
-    return {
-      ...metrics,
-      keyword
-    };
   } catch (error) {
     console.error('API Error:', error);
     throw new Error('키워드 분석 중 오류가 발생했습니다.');

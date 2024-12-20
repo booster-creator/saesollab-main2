@@ -37,7 +37,10 @@ function Search() {
           url: item.video.url,
           thumbnail: item.thumbnail,
           channelTitle: item.channel.title,
-          publishedAt: item.video.publishedAt
+          publishedAt: item.video.publishedAt,
+          tension: item.tension,
+          tensionLevel: item.tensionLevel,
+          tensionColor: item.tensionColor
         }));
         setSearchResults(formattedResults);
       }
@@ -57,7 +60,11 @@ function Search() {
       <div className="youtube-results">
         <h3>관련 YouTube 영상</h3>
         {searchResults.map((video, index) => (
-          <div key={index} className="video-item">
+          <div 
+            key={index} 
+            className="video-item"
+            style={{ borderLeft: `4px solid ${video.tensionColor}` }}
+          >
             <img 
               src={video.thumbnail} 
               alt={video.title} 
@@ -70,6 +77,13 @@ function Search() {
                 <span>조회수: {video.views.toLocaleString()}</span>
                 <span>좋아요: {video.likes.toLocaleString()}</span>
                 <span>댓글: {video.comments.toLocaleString()}</span>
+                <span className="tension-badge" style={{ backgroundColor: video.tensionColor }}>
+                  노출 온도: {video.tensionLevel}
+                </span>
+              </div>
+              <div className="engagement-stats">
+                <span>구독자 대비 조회수: {video.metrics.subscriberViewRatio}</span>
+                <span>상호작용률: {((video.likes + video.comments) / video.views * 100).toFixed(2)}%</span>
               </div>
               <a href={video.url} target="_blank" rel="noopener noreferrer" className="video-link">
                 영상 보기
