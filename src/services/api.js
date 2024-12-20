@@ -159,21 +159,38 @@ export async function analyzeKeyword(keyword) {
       })
     ]);
 
-    if (searchResults && searchResults.length > 0) {
-      const videoAnalyses = await Promise.all(
+    if (searchResults?.length > 0) {
+      let videoAnalyses = await Promise.all(
         searchResults.map(async (video) => {
           try {
             const analysis = await analyzeYouTubeData(video.id.videoId);
-            const tension = calculateTension({
-              viewCount: analysis.video.viewCount,
-              subscriberCount: analysis.channel.subscriberCount,
-              likeCount: analysis.video.likeCount,
-              commentCount: analysis.video.commentCount
-            });
-            const tensionInfo = getTensionLevel(tension);
+            if (!analysis) return null;
 
+            const tension = calculateTension({
+              viewCount: analysis.video.viewCount || 0,
+              subscriberCount: analysis.channel.subscriberCount || 0,
+              likeCount: analysis.video.likeCount || 0,
+              commentCount: analysis.video.commentCount || 0
+            });
+
+            const tensionInfo = getTensionLevel(tension);
             return {
-              ...analysis,
+              metrics: {
+                subscriberViewRatio: analysis.metrics.subscriberViewRatio || 'N/A',
+                viewLikeRatio: analysis.metrics.viewLikeRatio || 'N/A',
+                viewCommentRatio: analysis.metrics.viewCommentRatio || 'N/A'
+              },
+              video: {
+                title: video.snippet.title,
+                viewCount: analysis.video.viewCount || 0,
+                likeCount: analysis.video.likeCount || 0,
+                commentCount: analysis.video.commentCount || 0,
+                url: `https://www.youtube.com/watch?v=${video.id.videoId}`
+              },
+              channel: {
+                title: video.snippet.channelTitle,
+                subscriberCount: analysis.channel.subscriberCount || 0
+              },
               thumbnail: video.snippet.thumbnails.medium.url,
               tension,
               tensionLevel: tensionInfo.level,
@@ -184,7 +201,12 @@ export async function analyzeKeyword(keyword) {
             return null;
           }
         })
-      ).then(results => results.filter(Boolean)); // null 값 제거
+      );
+
+      // null 값 제거 및 정렬
+      videoAnalyses = videoAnalyses
+        .filter(Boolean)
+        .sort((a, b) => (b.tension || 0) - (a.tension || 0));
 
       return {
         keyword,
@@ -192,6 +214,12 @@ export async function analyzeKeyword(keyword) {
         youtubeData: videoAnalyses
       };
     }
+
+    return {
+      keyword,
+      suggestedKeywords: [],
+      youtubeData: []
+    };
   } catch (error) {
     console.error('API Error:', error);
     throw new Error('키워드 분석 중 오류가 발생했습니다.');
