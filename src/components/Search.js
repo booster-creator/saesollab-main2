@@ -60,25 +60,17 @@ function Search() {
       <div className="youtube-results">
         <h3>관련 YouTube 영상</h3>
         {searchResults.map((video, index) => (
-          <div 
-            key={index} 
-            className="video-item"
-            style={{ borderLeft: `4px solid ${video.tensionColor}` }}
-          >
-            <img 
-              src={video.thumbnail} 
-              alt={video.title} 
-              className="video-thumbnail"
-            />
+          <div key={index} className="video-item" style={{ borderLeft: `4px solid ${video.tensionColor}` }}>
+            <img src={video.thumbnail} alt={video.title} className="video-thumbnail" />
             <div className="video-info">
               <h4>{video.title}</h4>
               <p className="channel-title">{video.channelTitle}</p>
               <div className="video-stats">
-                <span>조회수: {video.views.toLocaleString()}</span>
-                <span>좋아요: {video.likes.toLocaleString()}</span>
-                <span>댓글: {video.comments.toLocaleString()}</span>
+                <span>조회수: {video.views?.toLocaleString() || '0'}</span>
+                <span>좋아요: {video.likes?.toLocaleString() || '0'}</span>
+                <span>댓글: {video.comments?.toLocaleString() || '0'}</span>
                 <span className="tension-badge" style={{ backgroundColor: video.tensionColor }}>
-                  노출 온도: {video.tensionLevel}
+                  노출 온도: {video.tensionLevel || '측정 중'}
                 </span>
               </div>
               <div className="engagement-stats">

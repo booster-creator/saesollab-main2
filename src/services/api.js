@@ -149,39 +149,46 @@ function getTensionLevel(tension) {
 export async function analyzeKeyword(keyword) {
   try {
     const [searchResults, suggestions] = await Promise.all([
-      searchYouTubeVideos(keyword),
-      getYouTubeSuggestions(keyword)
+      searchYouTubeVideos(keyword).catch(error => {
+        console.error('YouTube search failed:', error);
+        return [];
+      }),
+      getYouTubeSuggestions(keyword).catch(error => {
+        console.error('Suggestions failed:', error);
+        return [];
+      })
     ]);
 
     if (searchResults && searchResults.length > 0) {
-      // 각 비디오의 상세 정보와 매력도 계산
       const videoAnalyses = await Promise.all(
         searchResults.map(async (video) => {
-          const analysis = await analyzeYouTubeData(video.id.videoId);
-          const tension = calculateTension({
-            viewCount: analysis.video.viewCount,
-            subscriberCount: analysis.channel.subscriberCount,
-            likeCount: analysis.video.likeCount,
-            commentCount: analysis.video.commentCount
-          });
-          const tensionInfo = getTensionLevel(tension);
+          try {
+            const analysis = await analyzeYouTubeData(video.id.videoId);
+            const tension = calculateTension({
+              viewCount: analysis.video.viewCount,
+              subscriberCount: analysis.channel.subscriberCount,
+              likeCount: analysis.video.likeCount,
+              commentCount: analysis.video.commentCount
+            });
+            const tensionInfo = getTensionLevel(tension);
 
-          return {
-            ...analysis,
-            thumbnail: video.snippet.thumbnails.medium.url,
-            tension,
-            tensionLevel: tensionInfo.level,
-            tensionColor: tensionInfo.color
-          };
+            return {
+              ...analysis,
+              thumbnail: video.snippet.thumbnails.medium.url,
+              tension,
+              tensionLevel: tensionInfo.level,
+              tensionColor: tensionInfo.color
+            };
+          } catch (error) {
+            console.error(`Analysis failed for video ${video.id.videoId}:`, error);
+            return null;
+          }
         })
-      );
-
-      // 매력도 기준으로 정렬
-      videoAnalyses.sort((a, b) => b.tension - a.tension);
+      ).then(results => results.filter(Boolean)); // null 값 제거
 
       return {
         keyword,
-        suggestedKeywords: suggestions.slice(0, 10),
+        suggestedKeywords: suggestions?.slice(0, 10) || [],
         youtubeData: videoAnalyses
       };
     }
