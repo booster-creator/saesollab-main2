@@ -28,6 +28,7 @@ function Search() {
       console.log('Analysis results:', data);
 
       if (data.youtubeData && Array.isArray(data.youtubeData)) {
+        console.log('Raw YouTube data:', data.youtubeData);
         const formattedResults = data.youtubeData.map(item => ({
           title: item.video?.title || '',
           views: item.video?.viewCount || 0,
@@ -41,6 +42,8 @@ function Search() {
           tensionLevel: item.tensionLevel || '측정 중',
           tensionColor: item.tensionColor || '#ddd'
         }));
+        
+        console.log('Formatted results:', formattedResults);
         
         setResults(data);
         setSearchResults(formattedResults);
