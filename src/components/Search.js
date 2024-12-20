@@ -147,15 +147,17 @@ function Search() {
               </div>
             </div>
 
-            <div className="metric-card">
-              <div className="metric-header">
-                <h3>경쟁 강도</h3>
+            {results && results.competitorCount && (
+              <div className="metric-card">
+                <div className="metric-header">
+                  <h3>경쟁 강도</h3>
+                </div>
+                <div className="metric-value">{results.competition}</div>
+                <p className="metric-description">
+                  현재 약 {(results.competitorCount || 0).toLocaleString()}개의 채널이 해당 키워드로 활동 중입니다
+                </p>
               </div>
-              <div className="metric-value">{results.competition}</div>
-              <p className="metric-description">
-                현재 약 {results.competitorCount.toLocaleString()}개의 채널이 해당 키워드로 활동 중입니다
-              </p>
-            </div>
+            )}
 
             <div className="metric-card">
               <div className="metric-header">
