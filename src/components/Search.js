@@ -167,9 +167,9 @@ function Search() {
                 <h3>연관 키워드</h3>
               </div>
               <div className="keyword-list">
-                {results.relatedKeywords.map((keyword, index) => (
+                {results.relatedKeywords?.map((keyword, index) => (
                   <span key={index} className="keyword-tag">{keyword}</span>
-                ))}
+                )) || []}
               </div>
             </div>
 
